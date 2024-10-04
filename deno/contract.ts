@@ -126,7 +126,7 @@ export function serveContractApi(
       }
 
       await safeStore("contract_event_tracked_blocks", (b) =>
-        b.insert({
+        b.upsert({
           chain,
           contract: contractName,
           block: toBlock,
