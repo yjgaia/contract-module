@@ -64,7 +64,7 @@ export function serveContractApi(
         .json();
       if (contractName === undefined) throw new Error("Missing contract");
       if (!blockPeriod) {
-        if (chain === "base") blockPeriod = 500;
+        if (chain === "base" || chain === "base-sepolia") blockPeriod = 500;
         else if (chain === "arbitrum") blockPeriod = 2500;
         else blockPeriod = 750;
       }
