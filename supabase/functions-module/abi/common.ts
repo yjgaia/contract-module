@@ -11,7 +11,7 @@ import type {
   EventLog,
   TransactionRequest,
   LogDescription,
-} from "ethers";
+} from "https://esm.sh/ethers@6.7.0";
 
 export interface TypedDeferredTopicFilter<_TCEvent extends TypedContractEvent>
   extends DeferredTopicFilter {}
