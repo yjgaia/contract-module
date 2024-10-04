@@ -7,11 +7,10 @@ import {
 import {
   Context,
   response,
-} from "https://raw.githubusercontent.com/yjgaia/deno-module/main/api.ts";
+} from "https://raw.githubusercontent.com/yjgaia/deno-module/refs/heads/main/api.ts";
 import {
   safeFetch,
-  safeInsert,
-  safeUpsert,
+  safeStore,
 } from "https://raw.githubusercontent.com/yjgaia/supabase-module/refs/heads/main/supabase/functions-module/supabase.ts";
 import { TypedEventLog } from "./abi/common.ts";
 
@@ -95,16 +94,17 @@ export function serveContractApi(
             savedEvent.log_index === data.log_index
           )
         ) {
-          await safeUpsert("contract_events", data);
+          await safeStore("contract_events", (b) => b.upsert(data));
         }
       }
 
-      await safeInsert("contract_event_tracked_blocks", {
-        chain,
-        contract: contractName,
-        block: toBlock,
-        updated_at: new Date().toISOString(),
-      });
+      await safeStore("contract_event_tracked_blocks", (b) =>
+        b.insert({
+          chain,
+          contract: contractName,
+          block: toBlock,
+          updated_at: new Date().toISOString(),
+        }));
 
       context.response = response("ok");
     }
