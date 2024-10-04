@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS "public"."contract_events" (
     "block" bigint NOT NULL,
     "log_index" bigint NOT NULL,
     "tx" "text" NOT NULL,
-    "event_name" "text" NOT NULL,
+    "event" "text" NOT NULL,
     "args" "text"[] DEFAULT '{}'::"text"[] NOT NULL,
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
 );
