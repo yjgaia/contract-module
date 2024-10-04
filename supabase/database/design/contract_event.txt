@@ -1,0 +1,15 @@
+contract_event_tracked_blocks
+	chain - text - pk
+	contract - text - pk
+	block - int8 - not null
+	updated_at - timestampz - now()
+
+contract_events
+	chain - text - pk
+	contract - text - pk
+	block - int8 - pk
+	log_index - int8 - pk
+	tx - text - not null
+	event - text - not null
+	args - text[] - not null
+	created_at - timestampz - now()
