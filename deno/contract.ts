@@ -80,6 +80,8 @@ export function serveContractApi(
         (b) => b.select().eq("chain", chain).eq("contract", contract),
       );
 
+      console.log(data);
+
       let toBlock =
         (data?.block ?? (contractDeployedBlocks[contractName] ?? 0)) +
         blockPeriod;
