@@ -11,6 +11,7 @@ import {
 } from "https://raw.githubusercontent.com/yjgaia/deno-module/refs/heads/main/api.ts";
 import {
   safeFetch,
+  safeFetchSingle,
   safeStore,
 } from "https://raw.githubusercontent.com/yjgaia/supabase-module/refs/heads/main/deno/supabase.ts";
 import { TypedDeferredTopicFilter, TypedEventLog } from "./abi/common.ts";
@@ -74,9 +75,9 @@ export function serveContractApi(
       const address = contractAddresses[contractName][chain];
       const contract = new Contracts[contractName](signer, address);
 
-      const data = await safeFetch<{ block: number }>(
+      const data = await safeFetchSingle<{ block: number }>(
         "contract_event_tracked_blocks",
-        (b) => b.select().eq("chain", chain).eq("contract", contract).single(),
+        (b) => b.select().eq("chain", chain).eq("contract", contract),
       );
 
       let toBlock =
