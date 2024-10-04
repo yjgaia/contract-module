@@ -11,7 +11,7 @@ import {
 import {
   safeFetch,
   safeStore,
-} from "https://raw.githubusercontent.com/yjgaia/supabase-module/refs/heads/main/supabase/functions-module/supabase.ts";
+} from "https://raw.githubusercontent.com/yjgaia/supabase-module/refs/heads/main/deno/supabase.ts";
 import { TypedEventLog } from "./abi/common.ts";
 
 export abstract class Contract {
