@@ -13,24 +13,46 @@ import {
   safeFetch,
   safeStore,
 } from "https://raw.githubusercontent.com/yjgaia/supabase-module/refs/heads/main/deno/supabase.ts";
-import { TypedEventLog } from "./abi/common.ts";
+import { TypedDeferredTopicFilter, TypedEventLog } from "./abi/common.ts";
 
 export abstract class Contract<CT extends BaseContract = BaseContract> {
   protected abstract ethersContract: CT;
+  protected abstract eventFilters: {
+    [eventName: string]: TypedDeferredTopicFilter<any>;
+  };
 
-  public abstract eventTopicFilters: { [event: string]: TopicFilter };
+  public eventTopicFilters: { [event: string]: TopicFilter } = {};
 
-  constructor(protected signer: JsonRpcSigner) {}
+  constructor(protected signer: JsonRpcSigner, protected address: string) {}
 
-  public abstract getEvents(
+  public async getEvents(
     fromBlock: number,
     toBlock: number,
-  ): Promise<TypedEventLog<any>[]>;
+  ): Promise<TypedEventLog<any>[]> {
+    if (Object.keys(this.eventTopicFilters).length === 0) {
+      for (const eventName of Object.keys(this.eventFilters)) {
+        this.eventTopicFilters[eventName] = await this.eventFilters[eventName]
+          .getTopicFilter();
+      }
+    }
+
+    return await this.ethersContract.queryFilter(
+      [Object.values(this.eventTopicFilters).flat()] as any,
+      fromBlock,
+      toBlock,
+    ) as any;
+  }
 }
 
 export function serveContractApi(
   rpcs: { [chain: string]: string },
-  Contracts: { [contract: string]: new (signer: JsonRpcSigner) => Contract },
+  Contracts: {
+    [contract: string]: new (
+      signer: JsonRpcSigner,
+      address: string,
+    ) => Contract;
+  },
+  contractAddresses: { [contract: string]: { [chain: string]: string } },
   contractDeployedBlocks: { [contract: string]: number },
 ) {
   return async function (context: Context) {
@@ -49,7 +71,8 @@ export function serveContractApi(
 
       const provider = new JsonRpcProvider(rpcs[chain]);
       const signer = new JsonRpcSigner(provider, ZeroAddress);
-      const contract = new Contracts[contractName](signer);
+      const address = contractAddresses[contractName][chain];
+      const contract = new Contracts[contractName](signer, address);
 
       const data = await safeFetch<{ block: number }>(
         "contract_event_tracked_blocks",
