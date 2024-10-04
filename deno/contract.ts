@@ -1,4 +1,5 @@
 import {
+  BaseContract,
   JsonRpcProvider,
   JsonRpcSigner,
   TopicFilter,
@@ -14,15 +15,17 @@ import {
 } from "https://raw.githubusercontent.com/yjgaia/supabase-module/refs/heads/main/deno/supabase.ts";
 import { TypedEventLog } from "./abi/common.ts";
 
-export abstract class Contract {
+export abstract class Contract<CT extends BaseContract = BaseContract> {
+  protected abstract ethersContract: CT;
+
+  public abstract eventTopicFilters: { [event: string]: TopicFilter };
+
   constructor(protected signer: JsonRpcSigner) {}
 
   public abstract getEvents(
     fromBlock: number,
     toBlock: number,
   ): Promise<TypedEventLog<any>[]>;
-
-  public abstract eventTopicFilters: { [event: string]: TopicFilter };
 }
 
 export function serveContractApi(
