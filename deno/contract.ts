@@ -77,7 +77,7 @@ export function serveContractApi(
 
       const data = await safeFetchSingle<{ block: number }>(
         "contract_event_tracked_blocks",
-        (b) => b.select().eq("chain", chain).eq("contract", contract),
+        (b) => b.select().eq("chain", chain).eq("contract", contractName),
       );
 
       console.log(data);
