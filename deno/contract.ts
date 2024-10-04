@@ -8,12 +8,12 @@ import {
 import {
   Context,
   response,
-} from "https://raw.githubusercontent.com/yjgaia/deno-module/refs/heads/main/api.ts";
+} from "https://raw.githubusercontent.com/yjgaia/deno-module//main/api.ts";
 import {
   safeFetch,
   safeFetchSingle,
   safeStore,
-} from "https://raw.githubusercontent.com/yjgaia/supabase-module/refs/heads/main/deno/supabase.ts";
+} from "https://raw.githubusercontent.com/yjgaia/supabase-module//main/deno/supabase.ts";
 import { TypedDeferredTopicFilter, TypedEventLog } from "./abi/common.ts";
 
 export abstract class Contract<CT extends BaseContract = BaseContract> {
