@@ -2,12 +2,12 @@
   "name": "@common-module/contract",
   "author": "yj.gaia",
   "homepage": "https://yj.dev",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "type": "module",
   "types": "./lib/index.d.ts",
   "main": "./lib/index.js",
   "dependencies": {
-    "ethers": "^6.13.2"
+    "ethers": "^6.13.4"
   },
   "devDependencies": {}
 }

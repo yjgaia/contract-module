@@ -6,7 +6,7 @@ export default abstract class Contract<CT extends BaseContract> {
     private _viewContract;
     private get address();
     private get rpcProvider();
-    protected get viewContract(): CT;
+    private get viewContract();
     constructor(abi: Interface | InterfaceAbi);
     init(rpc: string, address: string): void;
     protected executeAndWait(signer: JsonRpcSigner, run: (contract: CT) => Promise<ContractTransactionResponse>): Promise<{
