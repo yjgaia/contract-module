@@ -24,7 +24,7 @@ export default abstract class Contract<CT extends BaseContract> {
     return this._rpcProvider;
   }
 
-  private get viewContract(): CT {
+  protected get viewContract(): CT {
     if (!this._viewContract) throw new Error("Contract not initialized");
     return this._viewContract;
   }
